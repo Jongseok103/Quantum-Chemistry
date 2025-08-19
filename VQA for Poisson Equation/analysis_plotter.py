@@ -7,6 +7,7 @@ import time
 # (이전과 동일한 임포트 및 함수 정의)
 from VQE_solver import run_vqe_for_poisson
 from VQE_solver_estimator import run_vqe_for_poisson as run_vqe_estimator
+from VQE_solver3 import run_vqe_for_poisson as run_vqe3
 from Ansatz import create_qaoa_ansatz as create_ansatz
 from decomposition import decompose_A_matrix, dict_to_operator
 from create_b_state import create_b_vector_gaussian
@@ -28,7 +29,7 @@ def run_fidelity_experiment(qubit_list, layer_range, b_func):
             ansatz_circuit = create_ansatz(m=m_qubits, layers=layers)
 
             
-            vqe_result, _ = run_vqe_estimator(
+            vqe_result, _ = run_vqe3(
                 m=m_qubits, 
                 ansatz=ansatz_circuit, 
                 b_creation_func=b_func
@@ -77,7 +78,7 @@ if __name__ == "__main__":
     QUBIT_LIST_TO_TEST = list(range(2, 5))
     
     # 테스트할 레이어 수 범위 (1부터 8까지)
-    LAYER_RANGE_TO_TEST = range(1, 9)
+    LAYER_RANGE_TO_TEST = range(1, 4)
     
     # 분석에 사용할 b 함수 (일관된 비교를 위해 하나로 고정)
     B_FUNCTION_FOR_TEST = create_b_vector_gaussian

@@ -1,9 +1,7 @@
-# file: decomposition.py
-
 import numpy as np
-from qiskit.quantum_info import Operator # type: ignore
+from qiskit.quantum_info import Operator
 
-# --- 행렬 분해 함수들 (이전과 동일) ---
+# --- 행렬 분해 함수들  ---
 def decompose_A_matrix(m: int) -> dict:
     terms = {'I' * m: 2.0}
     if m > 0:
@@ -33,9 +31,9 @@ def decompose_B_matrix(m: int) -> dict:
 def decompose_C_matrix(m: int) -> dict:
     return {'0' * m: 1.0, '1' * m: 1.0}
 
-# --- 변환 유틸리티 함수 (수정됨) ---
+# --- Operator 변환 함수 ---
 def dict_to_operator(op_dict: dict, num_qubits: int) -> Operator:
-    """파울리 문자열 딕셔너리를 Qiskit Operator 객체로 변환합니다. (안정성 개선)"""
+    """파울리 문자열 딕셔너리를 Qiskit Operator 객체로 변환"""
     op_map = {
         'I': Operator(np.identity(2, dtype=complex)),
         '+': Operator(np.array([[0, 1], [0, 0]], dtype=complex)),

@@ -3,9 +3,9 @@ from qiskit.circuit import ParameterVector # type: ignore
 import numpy as np
 
 def create_qaoa_ansatz(m: int, layers: int = 1) -> QuantumCircuit:
-    beta = ParameterVector('β', layers)  # Mixer per qubit
+    beta = ParameterVector('β', layers * 2)  # Mixer per qubit
     gamma_zz = ParameterVector('gamma_zz', layers)  # ZZ per pair
-    qc = QuantumCircuit(m)
+    qc = QuantumCircuit(m, name='QAOA_ansatz')
     
     # Initial |+> state
     qc.h(range(m))
@@ -18,7 +18,7 @@ def create_qaoa_ansatz(m: int, layers: int = 1) -> QuantumCircuit:
             qc.rz(2 * gamma_zz[layer], j)
             qc.cx(i, j)
         
-        qc.barrier()
+        #qc.barrier()
         
         # YY on 0-1 (논문 HD)
         qc.rx(np.pi/2, 0)
@@ -29,7 +29,7 @@ def create_qaoa_ansatz(m: int, layers: int = 1) -> QuantumCircuit:
         qc.rx(-np.pi/2, 0)
         qc.rx(-np.pi/2, 1)
         
-        qc.barrier()
+        #qc.barrier()
         
         # Mixer HM: RX on all
         for i in range(m):

@@ -9,6 +9,9 @@ import scipy.linalg as la # type: ignore
 # 각 모듈에서 필요한 함수들을 임포트합니다.
 from VQE_solver import run_vqe_for_poisson # type: ignore
 from VQE_solver_estimator import run_vqe_for_poisson as run_vqe_estimator
+from VQE_solver3 import run_vqe_for_poisson as run_vqe3
+
+
 from Ansatz import create_qaoa_ansatz as create_ansatz
 from decomposition import decompose_A_matrix, dict_to_operator
 from create_b_state import (
@@ -35,15 +38,14 @@ def get_user_inputs():
     choice = input(f"Enter your choice (1-{len(b_functions)}): ")
     b_func_name, b_func = b_functions.get(choice, ('Gaussian', create_b_vector_gaussian))
     
-    # ############################################################# #
-    # ########           솔버 선택 기능 추가 부분           ######## #
-    # ############################################################# #
+    # Solver 선택
     print("\nSelect the VQE solver to use:")
     print("  1: Statevector Solver (fast, exact simulation)")
     print("  2: Estimator Primitive (slower, simulates backend execution)")
+    print("  3: paper-style cost: <psi|B|psi>-<psi|C|psi>-|<b|A|psi>|^2")
     while True:
-        solver_choice = input("Enter your choice (1 or 2): ")
-        if solver_choice in ['1', '2']:
+        solver_choice = input("Enter your choice (1 or 2 or 3): ")
+        if solver_choice in ['1', '2', '3' ]:
             break
         else:
             print("Invalid choice. Please enter 1 or 2.")
@@ -112,9 +114,8 @@ if __name__ == "__main__":
     # 2. 안사츠 생성
     ansatz_circuit = create_ansatz(m=m_qubits, layers=ansatz_layers)
     
-    # ############################################################# #
-    # ########        사용자 선택에 따라 VQE 실행         ######## #
-    # ############################################################# #
+    
+    # 3. 사용자 선택에 따라 VQE 실행
     
     solver_name = ""
     if solver_choice == '1':
@@ -122,9 +123,16 @@ if __name__ == "__main__":
         vqe_result, b_vec_normalized = run_vqe_for_poisson(
             m=m_qubits, ansatz=ansatz_circuit, b_creation_func=b_func
         )
-    else: # solver_choice == '2'
-        solver_name = "Estimator Primitive"
+
+    elif solver_choice == '2':
+        solver_name = "Estimator Primitive Solver"
         vqe_result, b_vec_normalized = run_vqe_estimator(
+            m=m_qubits, ansatz=ansatz_circuit, b_creation_func=b_func
+        )
+    else: 
+        # solver_choice == '3'
+        solver_name = "Paper-style Cost Solver"
+        vqe_result, b_vec_normalized = run_vqe3(
             m=m_qubits, ansatz=ansatz_circuit, b_creation_func=b_func
         )
 
