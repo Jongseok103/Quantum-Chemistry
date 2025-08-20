@@ -62,7 +62,7 @@ def plot_results(results, layer_range):
     plt.xlabel('Number of Ansatz Layers', fontsize=14)
     plt.ylabel('Fidelity with Exact Solution', fontsize=14)
     plt.xticks(layer_range)
-    plt.ylim(0.9, 1.05)
+    #plt.ylim(0.9, 1.05)
     plt.legend(title='Number of Qubits', fontsize=12)
     plt.grid(True, which='both', linestyle='-', linewidth=0.5)
     plt.savefig('fidelity_vs_layers_analysis.png')
