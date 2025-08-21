@@ -9,8 +9,8 @@ if TYPE_CHECKING:
     from qiskit.circuit import QuantumCircuit # type: ignore
 
 # 다른 모듈에서 필요한 클래스 및 함수 임포트
-from decomposition import decompose_A_matrix, decompose_B_matrix, decompose_C_matrix, dict_to_operator
-from create_b_state import get_b_statevector, create_b_vector_gaussian
+from Utils.decomposition import decompose_A_matrix, decompose_B_matrix, decompose_C_matrix, dict_to_operator
+from Utils.create_b_state import get_b_statevector, create_b_vector_gaussian
 
 def run_vqe_for_poisson(m: int, ansatz: 'QuantumCircuit', b_creation_func=create_b_vector_gaussian):
     """VQE 알고리즘을 실행하여 최적의 파라미터를 찾습니다."""

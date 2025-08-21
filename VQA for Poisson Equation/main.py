@@ -7,14 +7,14 @@ from qiskit.quantum_info import Statevector # type: ignore
 import scipy.linalg as la # type: ignore
 
 # 각 모듈에서 필요한 함수들을 임포트합니다.
-from VQE_solver import run_vqe_for_poisson # type: ignore
-from VQE_solver_estimator import run_vqe_for_poisson as run_vqe_estimator
-from VQE_solver3 import run_vqe_for_poisson as run_vqe3
+from Solvers.VQE_solver import run_vqe_for_poisson # type: ignore
+from Solvers.VQE_solver_estimator import run_vqe_for_poisson as run_vqe_estimator
+from Solvers.VQE_solver3 import run_vqe_for_poisson as run_vqe3
 
 
-from Ansatz import create_qaoa_ansatz as create_ansatz
-from decomposition import decompose_A_matrix, dict_to_operator
-from create_b_state import (
+from Utils.Ansatz import create_qaoa_ansatz as create_ansatz
+from Utils.decomposition import decompose_A_matrix, dict_to_operator
+from Utils.create_b_state import (
     create_b_vector_gaussian,
     create_b_vector_sine,
     create_b_vector_uniform,
@@ -140,10 +140,16 @@ if __name__ == "__main__":
     optimal_parameters = vqe_result.x
     solution_state_vqe = infer_solution_statevector(ansatz_circuit, optimal_parameters)
     solution_x_vqe = solution_state_vqe.data
+
     
     # 5. 고전적 해 및 피델리티 계산
     exact_solution_vector = get_classical_solution(m_qubits, b_func)
-    fidelity = calculate_fidelity(solution_state_vqe, exact_solution_vector)
+    fidelity = calculate_fidelity(Statevector(solution_x_vqe), exact_solution_vector)
+
+    if np.dot(solution_x_vqe, exact_solution_vector.real) < 0:
+        solution_x_vqe *= -1
+    solution_x_vqe /= np.linalg.norm(solution_x_vqe)
+
     
     # 6. 결과 출력
     title = f"{m_qubits}-qubit, {ansatz_layers}-layer, b-func: {b_func_name}, Solver: {solver_name}"

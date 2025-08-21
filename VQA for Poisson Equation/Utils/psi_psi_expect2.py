@@ -4,6 +4,13 @@ from qiskit.primitives import StatevectorEstimator as Estimator # type: ignore
 from Utils.decomposition import *
 from Utils.To_Hermite_Operator import *
 
+def pauli_z_on(qubit_idx: int, n_qubits: int) -> SparsePauliOp:
+    """
+    n_qubits-큐빗 시스템에서 특정 큐빗에만 Z, 나머지에는 I를 배치한 관측 연산자.
+    """
+    pauli_str = ''.join('Z' if i == qubit_idx else 'I' for i in range(n_qubits))
+    return SparsePauliOp(pauli_str)
+
 
 def measure_non_hermitian_psi_psi(
     op_str: str,

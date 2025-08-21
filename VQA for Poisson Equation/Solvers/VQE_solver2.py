@@ -8,13 +8,13 @@ from qiskit.quantum_info import Statevector, Operator # type: ignore
 
 from scipy.optimize import minimize  # type: ignore
 
-from decomposition import (
+from Utils.decomposition import (
     decompose_A_matrix,
     decompose_B_matrix,
     decompose_C_matrix,
     dict_to_operator,
 )
-from create_b_state import get_b_statevector, create_b_vector_gaussian
+from Utils.create_b_state import get_b_statevector, create_b_vector_gaussian
 
 if TYPE_CHECKING:
     from qiskit.circuit import QuantumCircuit as QC # type: ignore

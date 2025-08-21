@@ -1,6 +1,9 @@
 import numpy as np
 from qiskit.quantum_info import Operator
 
+# How : 문자열 형태의 파울리 연산자를 딕셔너리 형태로 변환하여 행렬 분해를 수행.
+# 재귀적으로 각 행렬의 파울리 문자열을 분해하여 계수를 포함한 딕셔너리를 생성.
+
 # --- 행렬 분해 함수들  ---
 def decompose_A_matrix(m: int) -> dict:
     terms = {'I' * m: 2.0}
@@ -38,8 +41,8 @@ def dict_to_operator(op_dict: dict, num_qubits: int) -> Operator:
         'I': Operator(np.identity(2, dtype=complex)),
         '+': Operator(np.array([[0, 1], [0, 0]], dtype=complex)),
         '-': Operator(np.array([[0, 0], [1, 0]], dtype=complex)),
-        '0': Operator(np.array([[1, 0], [0, 0]], dtype=complex)),
-        '1': Operator(np.array([[0, 0], [0, 1]], dtype=complex))
+        '0': Operator(np.array([[1, 0], [0, 0]], dtype=complex)), # 0는 |0><0| 연산자
+        '1': Operator(np.array([[0, 0], [0, 1]], dtype=complex))  # 1은 |1><1| 연산자
     }
     
     total_op = Operator(np.zeros((2**num_qubits, 2**num_qubits), dtype=complex))

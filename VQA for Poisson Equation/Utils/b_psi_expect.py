@@ -1,7 +1,7 @@
 import numpy as np
 from qiskit import QuantumCircuit # type: ignore
 from qiskit.primitives import StatevectorEstimator as Estimator # type: ignore
-from To_Hermite_Operator import *
+from Utils.To_Hermite_Operator import *
 
 def create_real_b_psi_circuit(b_circuit, psi_ansatz, theta_value):
     # 단일 항에 대한 |<b|P|ψ>|² 값을 계산하기 위한 회로 생성
@@ -37,7 +37,6 @@ def create_imag_b_psi_circuit(b_circuit, psi_ansatz, theta_value):
     return final_circuit
 
 
-
 def calculate_b_P_psi_squared(
     p_term: str,
     b_circuit: QuantumCircuit,
@@ -46,10 +45,10 @@ def calculate_b_P_psi_squared(
     estimator: Estimator
 ) -> float:
     """
-    Hadamard-like 측정을 사용하여 단일 항에 대한 |<b|P|ψ>|² 값을 계산합니다.
+    Hadamard-like 측정을 사용하여 단일 항에 대한 |<b|P|ψ>|² 값을 계산.
     """
     # 1. 측정 가능한 에르미트 관측량 O 생성
-    observable = get_hermitian_observable(p_term)
+    observable = get_hermitian_observable(p_term) # ex) 'I+-' -> [[1, 0], [0, 1], [0, 0], [0, 0]] 형태의 행렬
 
     # 2. 실수부 측정을 위한 상태 준비 및 기댓값 계산
     real_state_circuit = create_real_b_psi_circuit(b_circuit, psi_ansatz, theta_value)
@@ -63,8 +62,6 @@ def calculate_b_P_psi_squared(
     
     # 4. 최종 값 |<b|P|ψ>|² 계산
     magnitude_squared = real_part**2 + imag_part**2
-
-    # print(f"  - Term '{p_term}': Re≈{real_part:.4f}, Im≈{imag_part:.4f}, |<·>|²≈{magnitude_squared:.4f}")
     
     return magnitude_squared
 
@@ -77,8 +74,7 @@ def calculate_b_psi_from_dict(
     theta_value: list[float]
 ) -> float:
     """
-    연산자 딕셔너리를 받아 각 항의 |<b|P_k|ψ>|² 값을 계산하고,
-    계수를 곱하여 총합을 반환합니다.
+    연산자 딕셔너리를 받아 각 항의 |<b|P_k|ψ>|² 값을 계산하고, 계수를 곱하여 총합을 반환.
     """
     total_sum = 0.0
     estimator = Estimator() # Estimator를 한 번만 생성하여 재사용
@@ -93,7 +89,5 @@ def calculate_b_psi_from_dict(
         # 계산된 값에 계수를 곱하여 총합에 더함
         total_sum += coeff * term_value_sq
         
-    #print(f"------------------------------------")
-    #print(f"Total Sum = {total_sum:.4f}")
-    #print(f'<b|A|ψ> = {total_sum:.4f} ')
+
     return total_sum
