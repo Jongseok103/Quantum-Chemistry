@@ -10,7 +10,3 @@ Focus: VQE baselines, entanglement/expectation experiments, and practical tips f
 ## Quick Start
 
 ### 1) Create an environment
-```bash
-python -m venv .venv
-source .venv/bin/activate            # Windows: .venv\Scripts\activate
-python -m pip install --upgrade pip
